@@ -1,5 +1,6 @@
 import { nearestPoint } from "./path";
-import { harvest, transfer, rangeRepair, build, upgrade } from "./operations"
+import { harvest, transfer, rangeRepair, build, upgrade, OpCode } from "./operations"
+import { Stage } from "./stages"
 
 /**
  * 定义一个专门采集能量的 Creep！

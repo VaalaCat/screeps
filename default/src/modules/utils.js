@@ -67,3 +67,14 @@ export const generateCreep = (spawn, num, role, body) => {
 	let creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role);
 	if (num > creeps.length) { newCreep(spawn, `${role.replace(/^\S/, s => s.toUpperCase())}${Game.time}`, role, body) }
 }
+
+
+/**
+ * 用于初始化一个 Creep
+ * @param {Creep} creep 
+ */
+export const initCreep = creep => {
+	if (typeof creep.memory.microop == 'undefined') creep.memory.microop = 0
+	if (typeof creep.memory.stage == 'undefined') creep.memory.stage = 0
+	if (typeof creep.memory.failed == 'undefined') creep.memory.failed = 0
+}
