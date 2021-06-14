@@ -67,12 +67,3 @@ export const generateCreep = (spawn, num, role, body) => {
 	let creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role);
 	if (num > creeps.length) { newCreep(spawn, `${role.replace(/^\S/, s => s.toUpperCase())}${Game.time}`, role, body) }
 }
-
-/**
- * 
- * @param {Creep} creep 目标 Creep
- * @param {*} range 
- */
-export const findNearBy = (creep, range) => {
-	
-}

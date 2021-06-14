@@ -1,4 +1,5 @@
 import { nearestPoint } from "./path";
+import { harvest, transfer, rangeRepair, build, upgrade } from "./operations"
 
 /**
  * 定义一个专门采集能量的 Creep！
@@ -10,32 +11,22 @@ export const roleHarvester = {
 	 * @param {Creep} creep 
 	 */
 	run: creep => {
-		if (creep.room.energyCapacityAvailable == creep.room.energyAvailable) {
-			roleBuilder.run(creep)
+		if ((creep.store.getFreeCapacity() == 0 && creep.memory.transfer == false)
+			|| typeof (creep.memory.transfer) == 'undefined'
+		) {
+			creep.memory.transfer = true
+			creep.say('🔄 transfer')
+		}
+		if (creep.store.getUsedCapacity() == 0 && creep.memory.transfer == true) {
+			creep.memory.transfer = false
+			creep.say('⛏ harvest');
+		}
+		if (creep.memory.transfer) {
+			transfer(creep, [STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION])
+			rangeRepair(creep)
 		} else {
-			if (creep.store.getFreeCapacity() > 0) {
-				let sources = creep.room.find(FIND_SOURCES);
-				let distnation = nearestPoint(creep, sources)
-				if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
-					creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } });
-				}
-			}
-			else {
-				let targets = creep.room.find(FIND_STRUCTURES, {
-					filter: (structure) => {
-						return (structure.structureType == STRUCTURE_EXTENSION ||
-							structure.structureType == STRUCTURE_SPAWN ||
-							structure.structureType == STRUCTURE_TOWER) &&
-							structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;
-					}
-				});
-				if (targets.length > 0) {
-					let distnation = nearestPoint(creep, targets)
-					if (creep.transfer(targets[distnation], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(targets[distnation], { visualizePathStyle: { stroke: '#ffffff' } });
-					}
-				}
-			}
+			harvest(creep)
+			rangeRepair(creep)
 		}
 	}
 };
@@ -53,7 +44,7 @@ export const roleUpgrader = {
 
 		if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
 			creep.memory.upgrading = false;
-			creep.say('🔄 harvest');
+			creep.say('⛏ harvest');
 		}
 		if (!creep.memory.upgrading && creep.store.getFreeCapacity() == 0) {
 			creep.memory.upgrading = true;
@@ -61,16 +52,10 @@ export const roleUpgrader = {
 		}
 
 		if (creep.memory.upgrading) {
-			if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-				creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
-			}
+			upgrade(creep)
 		}
 		else {
-			let sources = creep.room.find(FIND_SOURCES);
-			let distnation = nearestPoint(creep, sources)
-			if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
-				creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } });
-			}
+			harvest(creep)
 		}
 	}
 };
@@ -86,46 +71,20 @@ export const roleBuilder = {
 	 */
 	run: creep => {
 
-		if (creep.room.find(FIND_MY_CONSTRUCTION_SITES).length == 0) {
-			let targets = creep.room.find(FIND_STRUCTURES, {
-				filter: object => object.hits < object.hitsMax
-			});
+		if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
+			creep.memory.building = false;
+			creep.say('⛏ harvest');
+		}
+		if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
+			creep.memory.building = true;
+			creep.say('🚧 build');
+		}
 
-			targets.sort((a, b) => a.hits - b.hits);
-
-			if (targets.length > 0) {
-				if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
-					creep.moveTo(targets[0]);
-				}
-			}
+		if (creep.memory.building) {
 			roleUpgrader.run(creep)
 		}
 		else {
-			if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
-				creep.memory.building = false;
-				creep.say('🔄 harvest');
-			}
-			if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
-				creep.memory.building = true;
-				creep.say('🚧 build');
-			}
-
-			if (creep.memory.building) {
-				let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-				let distnation = nearestPoint(creep, targets)
-				if (targets.length) {
-					if (creep.build(targets[distnation]) == ERR_NOT_IN_RANGE) {
-						creep.moveTo(targets[distnation], { visualizePathStyle: { stroke: '#ffffff' } });
-					}
-				}
-			}
-			else {
-				let sources = creep.room.find(FIND_SOURCES);
-				let distnation = nearestPoint(creep, sources)
-				if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
-					creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } })
-				}
-			}
+			harvest(creep)
 		}
 	}
 };
