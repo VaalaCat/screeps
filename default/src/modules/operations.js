@@ -5,12 +5,10 @@ import { nearestPoint } from "./path";
  * @param {Creep} creep 
  */
 export const harvest = (creep) => {
-	if (creep.store.getFreeCapacity() > 0) {
-		let sources = creep.room.find(FIND_SOURCES_ACTIVE);
-		let distnation = nearestPoint(creep, sources)
-		if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
-			creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } });
-		}
+	let sources = creep.room.find(FIND_SOURCES_ACTIVE);
+	let distnation = nearestPoint(creep, sources)
+	if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
+		creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } });
 	}
 }
 
@@ -25,7 +23,7 @@ export const transfer = (creep, dists) => {
 			return (dists.indexOf(structure.structureType) != -1) && (structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
 		}
 	});
-	if (targets.length > 0) {
+	if (targets.length) {
 		let distnation = nearestPoint(creep, targets)
 		if (creep.transfer(targets[distnation], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 			creep.moveTo(targets[distnation], { visualizePathStyle: { stroke: '#ffffff' } });
@@ -58,7 +56,7 @@ export const repair = creep => {
 
 	targets.sort((a, b) => a.hits - b.hits);
 
-	if (targets.length > 0) {
+	if (targets.length) {
 		if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
 			creep.moveTo(targets[0]);
 		}
@@ -74,7 +72,7 @@ export const rangeRepair = creep => {
 		filter: object => (object.hits < object.hitsMax) && (creep.pos.inRangeTo(object, 3))
 	});
 	targets.sort((a, b) => a.hits - b.hits);
-	if (targets.length > 0) {
+	if (targets.length) {
 		creep.repair(targets[0])
 	}
 }
