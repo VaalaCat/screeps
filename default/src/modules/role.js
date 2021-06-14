@@ -1,6 +1,6 @@
 import { nearestPoint } from "./path";
 import { harvest, transfer, rangeRepair, build, upgrade, OpCode } from "./operations"
-import { Stage } from "./stages"
+import { Stage, Thread } from "./stages"
 
 /**
  * 定义一个专门采集能量的 Creep！
@@ -89,3 +89,36 @@ export const roleBuilder = {
 		}
 	}
 };
+
+/**
+ * 定义一个用于建筑的 Creep
+ */
+// export const roleBuilder = {
+
+// 	/** 
+// 	 * 让 Creep 去修房子！
+// 	 * @param {Creep} creep
+// 	 */
+// 	run: creep => {
+// 		let op1 = new OpCode(
+// 			{ func: build, args: '' }
+// 		)
+// 		let op2 = new OpCode(
+// 			{ func: harvest, args: '' }
+// 		)
+// 		let op3 = new OpCode(
+// 			{ func: transfer, args: [STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION] }
+// 		)
+// 		let op4 = new OpCode(
+// 			{ func: upgrade, args: '' }
+// 		)
+
+// 		let stage1 = new Stage(op1, op2)
+// 		let stage2 = new Stage(op2, op3)
+// 		let stage3 = new Stage(op2, op4)
+
+// 		let threadme = new Thread(stage1, stage2, stage3)
+
+// 		threadme.start(creep)
+// 	}
+// };

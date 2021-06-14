@@ -119,13 +119,14 @@ export const nearByOperation = (creep, targets, func, ...args) => {
 	}
 }
 
-export let OpCode = class {
+export class OpCode {
 	/**
 	 * 用于构建一个多微指令并行的微指令列表
 	 * @param  {...any} args 
 	 */
 	constructor(...args) {
 		this.operations = [...args];
+		return this;
 	}
 
 	/**
@@ -133,13 +134,14 @@ export let OpCode = class {
 	 * @param {Creep} creep 
 	 * @return {boolean}
 	 */
-	run(creep) {
+	exec(creep) {
 		let ans = this.operations.every((element, index, array) => {
 			//如果第一个微指令（主指令）执行失败则代表失败
-			if (!element.func(creep, element.args) && index == 0) return true;
-			return false;
+			if (!element.func(creep, element.args) && index == 0) return false;
+			return true;
 		})
 		creep.memory.failed += ans;
+		console.log(ans)
 		return ans
 	}
 }

@@ -1,5 +1,5 @@
 import { errorMapper } from './modules/errorMapper'
-import { aKindCreepToDo, everyCreepToDo, renewCreep, generateCreep, clearMemory } from './modules/utils'
+import { aKindCreepToDo, everyCreepToDo, renewCreep, generateCreep, clearMemory, initCreep } from './modules/utils'
 import { roleHarvester, roleUpgrader, roleBuilder } from './modules/role'
 
 export const loop = errorMapper(() => {

@@ -7,7 +7,7 @@
  */
 export const newCreep = (spawn, name, role, body) => {
 	Game.spawns[spawn].spawnCreep(body, name, {
-		memory: { role: role }
+		memory: { role: role, microop: 0, stage: 0, failed: 0 }
 	});
 }
 
@@ -18,7 +18,7 @@ export const newCreep = (spawn, name, role, body) => {
 export const everyCreepToDo = (func, ...args) => {
 	for (let name in Game.creeps) {
 		let creep = Game.creeps[name];
-		func(creep, args);
+		func(creep, ...args);
 	}
 }
 
@@ -74,7 +74,7 @@ export const generateCreep = (spawn, num, role, body) => {
  * @param {Creep} creep 
  */
 export const initCreep = creep => {
-	if (typeof creep.memory.microop == 'undefined') creep.memory.microop = 0
-	if (typeof creep.memory.stage == 'undefined') creep.memory.stage = 0
-	if (typeof creep.memory.failed == 'undefined') creep.memory.failed = 0
+	if (typeof (creep.memory.microop) == 'undefined') creep.memory.microop = 0
+	if (typeof (creep.memory.stage) == 'undefined') creep.memory.stage = 0
+	if (typeof (creep.memory.failed) == 'undefined') creep.memory.failed = 0
 }
