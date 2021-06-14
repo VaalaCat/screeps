@@ -1,0 +1,28 @@
+{
+    "name": "default",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "rollup -cw",
+        "push": "rollup -cw --environment DEST:main",
+        "local": "rollup -cw --environment DEST:local"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^19.0.0",
+        "@rollup/plugin-node-resolve": "^13.0.0",
+        "@types/lodash": "^4.14.170",
+        "@types/screeps": "^3.2.2",
+        "rollup": "^2.51.2",
+        "rollup-plugin-clear": "^2.0.7",
+        "rollup-plugin-copy": "^3.4.0",
+        "rollup-plugin-screeps": "^1.0.1"
+    },
+    "dependencies": {
+        "source-map": "^0.6.1"
+    }
+}
