@@ -6,9 +6,11 @@ import { nearestPoint } from "./path";
  */
 export const harvest = (creep) => {
 	let sources = creep.room.find(FIND_SOURCES_ACTIVE);
-	let distnation = nearestPoint(creep, sources)
-	if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
-		creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } });
+	if (sources.length) {
+		let distnation = nearestPoint(creep, sources)
+		if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
+			creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } });
+		}
 	}
 }
 
@@ -37,8 +39,8 @@ export const transfer = (creep, dists) => {
  */
 export const build = (creep) => {
 	let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-	let distnation = nearestPoint(creep, targets)
 	if (targets.length) {
+		let distnation = nearestPoint(creep, targets)
 		if (creep.build(targets[distnation]) == ERR_NOT_IN_RANGE) {
 			creep.moveTo(targets[distnation], { visualizePathStyle: { stroke: '#ffffff' } });
 		}
@@ -53,10 +55,8 @@ export const repair = creep => {
 	let targets = creep.room.find(FIND_STRUCTURES, {
 		filter: object => object.hits < object.hitsMax
 	});
-
-	targets.sort((a, b) => a.hits - b.hits);
-
 	if (targets.length) {
+		targets.sort((a, b) => a.hits - b.hits);
 		if (creep.repair(targets[0]) == ERR_NOT_IN_RANGE) {
 			creep.moveTo(targets[0]);
 		}
@@ -71,8 +71,8 @@ export const rangeRepair = creep => {
 	let targets = creep.room.find(FIND_STRUCTURES, {
 		filter: object => (object.hits < object.hitsMax) && (creep.pos.inRangeTo(object, 3))
 	});
-	targets.sort((a, b) => a.hits - b.hits);
 	if (targets.length) {
+		targets.sort((a, b) => a.hits - b.hits);
 		creep.repair(targets[0])
 	}
 }
