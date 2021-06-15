@@ -52,8 +52,6 @@ export class Thread {
 	 * @param {Creep} creep 
 	 */
 	start(creep) {
-		// creep.memory.stage = 0
-
 		let runSuccess = this.stages[creep.memory.stage].run(creep)
 		// 如果阶段运行失败
 		if (!runSuccess) {
