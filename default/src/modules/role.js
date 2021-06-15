@@ -2,6 +2,23 @@ import { nearestPoint } from "./path";
 import { harvest, transfer, rangeRepair, build, upgrade, OpCode } from "./operations"
 import { Stage, Thread } from "./stages"
 
+
+let bud = new OpCode(
+	{ func: build, args: '1' },
+	{ func: rangeRepair, args: '' }
+)
+let harv = new OpCode(
+	{ func: harvest, args: '2' }
+)
+let trans = new OpCode(
+	{ func: transfer, args: [STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION] },
+	{ func: rangeRepair, args: '' }
+)
+let upg = new OpCode(
+	{ func: upgrade, args: '3' },
+	{ func: rangeRepair, args: '' }
+)
+
 /**
  * 定义一个专门采集能量的 Creep！
  */
@@ -12,23 +29,14 @@ export const roleHarvester = {
 	 * @param {Creep} creep 
 	 */
 	run: creep => {
-		if ((creep.store.getFreeCapacity() == 0 && creep.memory.transfer == false)
-			|| typeof (creep.memory.transfer) == 'undefined'
-		) {
-			creep.memory.transfer = true
-			creep.say('🔄 transfer')
-		}
-		if (creep.store.getUsedCapacity() == 0 && creep.memory.transfer == true) {
-			creep.memory.transfer = false
-			creep.say('⛏ harvest');
-		}
-		if (creep.memory.transfer) {
-			transfer(creep, [STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION])
-			rangeRepair(creep)
-		} else {
-			harvest(creep)
-			rangeRepair(creep)
-		}
+		let stage1 = new Stage(harv)
+		let stage2 = new Stage(upg)
+		let stage3 = new Stage(trans)
+		let stage4 = new Stage(bud)
+
+		let threadme = new Thread(stage1, stage2, stage3, stage4)
+
+		threadme.start(creep)
 	}
 };
 
@@ -43,21 +51,14 @@ export const roleUpgrader = {
 	 */
 	run: creep => {
 
-		if (creep.memory.upgrading && creep.store[RESOURCE_ENERGY] == 0) {
-			creep.memory.upgrading = false;
-			creep.say('⛏ harvest');
-		}
-		if (!creep.memory.upgrading && creep.store.getFreeCapacity() == 0) {
-			creep.memory.upgrading = true;
-			creep.say('⚡ upgrade');
-		}
+		let stage1 = new Stage(harv)
+		let stage2 = new Stage(trans)
+		let stage3 = new Stage(bud)
+		let stage4 = new Stage(upg)
 
-		if (creep.memory.upgrading) {
-			upgrade(creep)
-		}
-		else {
-			harvest(creep)
-		}
+		let threadme = new Thread(stage1, stage2, stage3, stage4)
+
+		threadme.start(creep)
 	}
 };
 
@@ -72,53 +73,13 @@ export const roleBuilder = {
 	 */
 	run: creep => {
 
-		if (creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
-			creep.memory.building = false;
-			creep.say('⛏ harvest');
-		}
-		if (!creep.memory.building && creep.store.getFreeCapacity() == 0) {
-			creep.memory.building = true;
-			creep.say('🚧 build');
-		}
+		let stage1 = new Stage(harv)
+		let stage2 = new Stage(bud)
+		let stage3 = new Stage(trans)
+		let stage4 = new Stage(upg)
 
-		if (creep.memory.building) {
-			roleUpgrader.run(creep)
-		}
-		else {
-			harvest(creep)
-		}
+		let threadme = new Thread(stage1, stage2, stage3, stage4)
+
+		threadme.start(creep)
 	}
 };
-
-/**
- * 定义一个用于建筑的 Creep
- */
-// export const roleBuilder = {
-
-// 	/** 
-// 	 * 让 Creep 去修房子！
-// 	 * @param {Creep} creep
-// 	 */
-// 	run: creep => {
-// 		let op1 = new OpCode(
-// 			{ func: build, args: '' }
-// 		)
-// 		let op2 = new OpCode(
-// 			{ func: harvest, args: '' }
-// 		)
-// 		let op3 = new OpCode(
-// 			{ func: transfer, args: [STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION] }
-// 		)
-// 		let op4 = new OpCode(
-// 			{ func: upgrade, args: '' }
-// 		)
-
-// 		let stage1 = new Stage(op1, op2)
-// 		let stage2 = new Stage(op2, op3)
-// 		let stage3 = new Stage(op2, op4)
-
-// 		let threadme = new Thread(stage1, stage2, stage3)
-
-// 		threadme.start(creep)
-// 	}
-// };

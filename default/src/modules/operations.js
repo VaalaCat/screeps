@@ -97,12 +97,13 @@ export const rangeRepair = creep => {
  * @param {Creep} creep 
  */
 export const upgrade = creep => {
-	if (creep.store.getUsedCapacity() == 0) return false
+	if (creep.store.getUsedCapacity() == 0) {
+		return false
+	}
 	if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
 		creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
-		return true
 	}
-	return false
+	return true
 }
 
 
@@ -135,13 +136,12 @@ export class OpCode {
 	 * @return {boolean}
 	 */
 	exec(creep) {
-		let ans = this.operations.every((element, index, array) => {
-			//如果第一个微指令（主指令）执行失败则代表失败
-			if (!element.func(creep, element.args) && index == 0) return false;
+		//如果第一个微指令（主指令）执行失败则代表失败
+		let ans = this.operations[0].func(creep, this.operations[0].args)
+		this.operations.every((element, index, array) => {
+			if (index != 0) element.func(creep, element.args)
 			return true;
 		})
-		creep.memory.failed += ans;
-		console.log(ans)
 		return ans
 	}
 }
