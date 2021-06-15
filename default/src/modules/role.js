@@ -1,6 +1,7 @@
 import { nearestPoint } from "./path";
-import { harvest, transfer, rangeRepair, build, upgrade, OpCode, pickUp, withdraw, deaderCollect, moveToFlag } from "./operations"
+import { harvest, transfer, rangeRepair, build, upgrade, OpCode, pickUp, withdraw, deaderCollect, moveToFlag, repair } from "./operations"
 import { Stage, Thread } from "./stages"
+import { autoAttackCreep } from "./attack"
 
 
 let bud = new OpCode(
@@ -23,6 +24,10 @@ let pik = new OpCode(
 	{ func: pickUp, args: '' }
 )
 
+let rpir = new OpCode(
+	{ func: repair, args: '' }
+)
+
 let wdra = new OpCode(
 	{ func: withdraw, args: [STRUCTURE_STORAGE] }
 )
@@ -33,6 +38,10 @@ let cldead = new OpCode(
 
 let mvtflg = new OpCode(
 	{ func: moveToFlag, args: '' }
+)
+
+let autoatkcrp = new OpCode(
+	{ func: autoAttackCreep, args: '' }
 )
 
 /**
@@ -125,5 +134,17 @@ export const roleMiscer = {
 		let threadme = new Thread(stage0, stage1, stage2, stage3)
 
 		threadme.start(creep)
+	}
+}
+
+export const roleAttacker = {
+
+	run: obj => {
+		let stage1 = new Stage(rpir)
+		let stage2 = new Stage(autoatkcrp)
+
+		let threadme = new Thread(stage1, stage2)
+
+		threadme.start(obj)
 	}
 }

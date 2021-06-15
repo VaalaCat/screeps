@@ -70,11 +70,12 @@ export const generateCreep = (spawn, num, role, body) => {
 
 
 /**
- * 用于初始化一个 Creep
- * @param {Creep} creep 
+ * 用于初始化一个对象
+ * @param {any} obj
  */
-export const initCreep = creep => {
-	if (typeof (creep.memory.microop) == 'undefined') creep.memory.microop = 0
-	if (typeof (creep.memory.stage) == 'undefined') creep.memory.stage = 0
-	if (typeof (creep.memory.failed) == 'undefined') creep.memory.failed = 0
+export const initObj = obj => {
+	if (typeof (obj.memory.microop) == 'undefined') obj.memory.microop = 0
+	if (typeof (obj.memory.stage) == 'undefined') obj.memory.stage = 0
+	if (typeof (obj.memory.failed) == 'undefined') obj.memory.failed = 0
+	if (typeof (obj.memory.busy) == 'undefined') obj.memory.busy = false
 }

@@ -58,7 +58,7 @@ export const build = creep => {
 
 /**
  * 维修受伤最大的某个目标
- * @param {Creep} creep 
+ * @param {any} creep 
  */
 export const repair = creep => {
 	if (creep.store.getUsedCapacity() == 0) return false
