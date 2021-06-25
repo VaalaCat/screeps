@@ -140,7 +140,7 @@ export const pickUp = (creep, ...args) => {
  * @param {Creep} creep 
  * @param {array} origin 指定提取物资从什么类型的结构来
  */
-export const withdraw = (creep, origin) => {
+export const withdrawStructure = (creep, origin) => {
 	if (creep.store.getFreeCapacity() == 0) return false
 	let targets = creep.room.find(FIND_STRUCTURES, {
 		filter: (structure) => {
@@ -164,6 +164,28 @@ export const withdraw = (creep, origin) => {
 export const deaderCollect = creep => {
 	if (creep.store.getFreeCapacity() == 0) return false
 	let deaders = creep.room.find(FIND_TOMBSTONES, {
+		filter: (deader) => {
+			return (deader.store.getUsedCapacity(RESOURCE_ENERGY) > 0)
+		}
+	})
+	if (deaders.length) {
+		let distnation = nearestPoint(creep, deaders)
+		if (creep.withdraw(deaders[distnation], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+			creep.moveTo(deaders[distnation], { visualizePathStyle: { stroke: '#ffffff' } })
+		}
+		return true
+	}
+	return false
+}
+
+/**
+ * 从某种对象中获取资源
+ * @param {Creep} creep 
+ * @param {any} origin
+ */
+export const withdrawAll = (creep, origin) => {
+	if (creep.store.getFreeCapacity() == 0) return false
+	let deaders = creep.room.find(origin, {
 		filter: (deader) => {
 			return (deader.store.getUsedCapacity(RESOURCE_ENERGY) > 0)
 		}

@@ -1,5 +1,5 @@
 import { nearestPoint } from "./path";
-import { harvest, transfer, rangeRepair, build, upgrade, OpCode, pickUp, withdraw, deaderCollect, moveToFlag, repair } from "./operations"
+import { harvest, transfer, rangeRepair, build, upgrade, OpCode, pickUp, withdrawAll, deaderCollect, moveToFlag, repair } from "./operations"
 import { Stage, Thread } from "./stages"
 import { autoAttackCreep } from "./attack"
 
@@ -28,8 +28,8 @@ let rpir = new OpCode(
 	{ func: repair, args: '' }
 )
 
-let wdra = new OpCode(
-	{ func: withdraw, args: [STRUCTURE_STORAGE] }
+let wthdwall = new OpCode(
+	{ func: withdrawAll, args: FIND_RUINS }
 )
 
 let cldead = new OpCode(
@@ -55,9 +55,9 @@ export const roleHarvester = {
 	 */
 	run: creep => {
 		let stage1 = new Stage(harv)
-		let stage2 = new Stage(upg)
-		let stage3 = new Stage(trans)
-		let stage4 = new Stage(bud)
+		let stage2 = new Stage(trans)
+		let stage3 = new Stage(bud)
+		let stage4 = new Stage(upg)
 
 		let threadme = new Thread(stage1, stage2, stage3, stage4)
 
@@ -77,9 +77,9 @@ export const roleUpgrader = {
 	run: creep => {
 
 		let stage1 = new Stage(harv)
-		let stage2 = new Stage(trans)
+		let stage2 = new Stage(upg)
 		let stage3 = new Stage(bud)
-		let stage4 = new Stage(upg)
+		let stage4 = new Stage(trans)
 
 		let threadme = new Thread(stage1, stage2, stage3, stage4)
 
@@ -127,11 +127,12 @@ export const roleMiscer = {
 		// if (creep.memory.stage == 3) creep.memory.stage = 0
 
 		let stage0 = new Stage(mvtflg)
+		let stage0p5 = new Stage(wthdwall)
 		let stage1 = new Stage(pik)
 		let stage2 = new Stage(cldead)
 		let stage3 = new Stage(transToAny)
 
-		let threadme = new Thread(stage0, stage1, stage2, stage3)
+		let threadme = new Thread(stage0, stage0p5, stage1, stage2, stage3)
 
 		threadme.start(creep)
 	}
