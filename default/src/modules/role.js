@@ -1,22 +1,25 @@
 import { nearestPoint } from "./path";
-import { harvest, transfer, rangeRepair, build, upgrade, OpCode, pickUp, withdrawAll, deaderCollect, moveToFlag, repair } from "./operations"
+import { harvest, transfer, rangeRepair, build, upgrade, OpCode, pickUp, withdrawAll, deaderCollect, moveToFlag, repair, withdrawStructure } from "./operations"
 import { Stage, Thread } from "./stages"
 import { autoAttackCreep } from "./attack"
 
 
 let bud = new OpCode(
-	{ func: build, args: '1' },
+	{ func: build, args: '' },
 	{ func: rangeRepair, args: '' }
 )
+
 let harv = new OpCode(
-	{ func: harvest, args: '2' }
+	{ func: harvest, args: '' }
 )
+
 let trans = new OpCode(
 	{ func: transfer, args: [STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION] },
 	{ func: rangeRepair, args: '' }
 )
+
 let upg = new OpCode(
-	{ func: upgrade, args: '3' },
+	{ func: upgrade, args: '' },
 	{ func: rangeRepair, args: '' }
 )
 
@@ -44,6 +47,37 @@ let autoatkcrp = new OpCode(
 	{ func: autoAttackCreep, args: '' }
 )
 
+let getResource = new OpCode(
+	{ func: withdrawStructure, args: [STRUCTURE_CONTAINER] }
+)
+
+/**
+ * 定义一个只用来挖矿的 Creep
+ */
+export const roleMineer = {
+
+	/**
+	 * 让 Creep 去挖矿
+	 * @param {Creep} creep 
+	 */
+	run: creep => {
+
+		let save = new OpCode(
+			{ func: transfer, args: [STRUCTURE_CONTAINER] },
+			{ func: rangeRepair, args: '' }
+		)
+
+		let stage0 = new Stage(mvtflg)
+		let stage1 = new Stage(harv)
+		// let stage2 = new Stage(save)
+
+		let threadme = new Thread(stage0, stage1)
+
+		threadme.start(creep)
+
+	}
+};
+
 /**
  * 定义一个专门采集能量的 Creep！
  */
@@ -54,12 +88,14 @@ export const roleHarvester = {
 	 * @param {Creep} creep 
 	 */
 	run: creep => {
-		let stage1 = new Stage(harv)
+		// let stage1 = new Stage(harv)
+		let stage0p5 = new Stage(pik)
+		let stage1 = new Stage(getResource)
 		let stage2 = new Stage(trans)
 		let stage3 = new Stage(bud)
 		let stage4 = new Stage(upg)
 
-		let threadme = new Thread(stage1, stage2, stage3, stage4)
+		let threadme = new Thread(stage0p5, stage1, stage2, stage3, stage4)
 
 		threadme.start(creep)
 	}
@@ -76,12 +112,14 @@ export const roleUpgrader = {
 	 */
 	run: creep => {
 
-		let stage1 = new Stage(harv)
+		// let stage1 = new Stage(harv)
+		let stage0p5 = new Stage(pik)
+		let stage1 = new Stage(getResource)
 		let stage2 = new Stage(upg)
 		let stage3 = new Stage(bud)
 		let stage4 = new Stage(trans)
 
-		let threadme = new Thread(stage1, stage2, stage3, stage4)
+		let threadme = new Thread(stage0p5, stage1, stage2, stage3, stage4)
 
 		threadme.start(creep)
 	}
@@ -98,12 +136,14 @@ export const roleBuilder = {
 	 */
 	run: creep => {
 
-		let stage1 = new Stage(harv)
+		// let stage1 = new Stage(harv)
+		let stage0p5 = new Stage(pik)
+		let stage1 = new Stage(getResource)
 		let stage2 = new Stage(bud)
 		let stage3 = new Stage(trans)
 		let stage4 = new Stage(upg)
 
-		let threadme = new Thread(stage1, stage2, stage3, stage4)
+		let threadme = new Thread(stage0p5, stage1, stage2, stage3, stage4)
 
 		threadme.start(creep)
 	}

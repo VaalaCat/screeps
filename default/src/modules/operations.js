@@ -201,17 +201,30 @@ export const withdrawAll = (creep, origin) => {
 }
 
 /**
- * 移动到最近的一个flag并取消
+ * 移动到最近的一个flag
  * @param {Creep} creep 
  */
 export const moveToFlag = (creep) => {
-	let flags = creep.room.find(FIND_FLAGS)
+	let flags = creep.room.find(FIND_FLAGS, {
+		filter: (flag) => {
+			const look = flag.pos.look()
+			let haveCreep = false
+			for (let i in look) {
+				if (look[i].type === 'creep') {
+					haveCreep = true
+					break
+				}
+			}
+			if (creep.name.indexOf(flag.name) != -1 && !haveCreep) return true;
+			return false;
+		}
+	})
 	if (flags.length) {
 		let distnation = nearestPoint(creep, flags)
 		if (!creep.pos.isEqualTo(flags[distnation])) {
 			creep.moveTo(flags[distnation], { visualizePathStyle: { stroke: '#666666' } })
 		} else {
-			flags[distnation].remove()
+			// flags[distnation].remove()
 			return false
 		}
 		return true
