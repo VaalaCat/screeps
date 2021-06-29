@@ -51,6 +51,15 @@ let getResource = new OpCode(
 	{ func: withdrawStructure, args: [STRUCTURE_CONTAINER] }
 )
 
+let overdraft = new OpCode(
+	{ func: withdrawStructure, args: [STRUCTURE_STORAGE] }
+)
+
+let transToAny = new OpCode(
+	{ func: transfer, args: [STRUCTURE_STORAGE, STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION] },
+	{ func: rangeRepair, args: '' }
+)
+
 /**
  * 定义一个只用来挖矿的 Creep
  */
@@ -91,7 +100,7 @@ export const roleHarvester = {
 		// let stage1 = new Stage(harv)
 		let stage0p5 = new Stage(pik)
 		let stage1 = new Stage(getResource)
-		let stage2 = new Stage(trans)
+		let stage2 = new Stage(transToAny)
 		let stage3 = new Stage(bud)
 		let stage4 = new Stage(upg)
 
@@ -115,11 +124,12 @@ export const roleUpgrader = {
 		// let stage1 = new Stage(harv)
 		let stage0p5 = new Stage(pik)
 		let stage1 = new Stage(getResource)
+		let stage1p5 = new Stage(overdraft)
 		let stage2 = new Stage(upg)
 		let stage3 = new Stage(bud)
 		let stage4 = new Stage(trans)
 
-		let threadme = new Thread(stage0p5, stage1, stage2, stage3, stage4)
+		let threadme = new Thread(stage0p5, stage1, stage1p5, stage2, stage3, stage4)
 
 		threadme.start(creep)
 	}
@@ -139,11 +149,12 @@ export const roleBuilder = {
 		// let stage1 = new Stage(harv)
 		let stage0p5 = new Stage(pik)
 		let stage1 = new Stage(getResource)
+		let stage1p5 = new Stage(overdraft)
 		let stage2 = new Stage(bud)
-		let stage3 = new Stage(trans)
-		let stage4 = new Stage(upg)
+		let stage3 = new Stage(upg)
+		let stage4 = new Stage(trans)
 
-		let threadme = new Thread(stage0p5, stage1, stage2, stage3, stage4)
+		let threadme = new Thread(stage0p5, stage1, stage1p5, stage2, stage3, stage4)
 
 		threadme.start(creep)
 	}
@@ -159,10 +170,6 @@ export const roleMiscer = {
 	 * @param {Creep} creep 
 	 */
 	run: creep => {
-		let transToAny = new OpCode(
-			{ func: transfer, args: [STRUCTURE_STORAGE, STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION] },
-			{ func: rangeRepair, args: '' }
-		)
 		//可打断型线程
 		// if (creep.memory.stage == 3) creep.memory.stage = 0
 

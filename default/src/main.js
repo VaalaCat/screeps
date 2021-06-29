@@ -13,11 +13,11 @@ export const loop = errorMapper(() => {
 
 	everyCreepToDo(renewCreep, 'Spawn1')
 
-	generateCreep('Spawn1', 1, 'harvester', [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY,CARRY, MOVE, MOVE, MOVE, MOVE, MOVE])
-	generateCreep('Spawn1', 1, 'builder', [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY,CARRY, MOVE, MOVE, MOVE, MOVE, MOVE])
-	generateCreep('Spawn1', 1, 'upgrader', [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY,CARRY, MOVE, MOVE, MOVE, MOVE, MOVE])
-	generateCreep('Spawn1', 1, 'miscer', [WORK, WORK, ATTACK, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE])
-	generateCreep('Spawn1', 2, 'mineer', [WORK, WORK, WORK, WORK, WORK, MOVE])
+	generateCreep('Spawn1', 1, 'harvester', [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE])
+	generateCreep('Spawn1', 1, 'builder', [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE])
+	generateCreep('Spawn1', 2, 'upgrader', [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE])
+	generateCreep('Spawn1', 1, 'miscer', [WORK, WORK, ATTACK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE])
+	generateCreep('Spawn1', 2, 'mineer', [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE])
 
 	clearMemory()
 	autoAttackCreep(Game.structures['60c613f3dd1942092e892a2f'])

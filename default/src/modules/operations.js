@@ -10,7 +10,8 @@ export const harvest = creep => {
 	if (sources.length) {
 		let distnation = nearestPoint(creep, sources)
 		if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
-			creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } })
+			// creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } })
+			return false
 		}
 		return true
 	}
@@ -114,10 +115,16 @@ export const upgrade = creep => {
 export const pickUp = (creep, ...args) => {
 	if (creep.store.getFreeCapacity() == 0) return false;
 	if (args.length != 2) {
-		let targets = creep.room.find(FIND_DROPPED_RESOURCES);
+		let targets = creep.room.find(FIND_DROPPED_RESOURCES, {
+			filter: (resource) => {
+				if (resource.amount >= 100) return true
+				return false
+			}
+		});
+		let distnation = nearestPoint(creep, targets)
 		if (targets.length) {
-			creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#22d18b' } });
-			creep.pickup(targets[0]);
+			creep.moveTo(targets[distnation], { visualizePathStyle: { stroke: '#22d18b' } });
+			creep.pickup(targets[distnation]);
 			return true
 		}
 		return false
@@ -144,7 +151,7 @@ export const withdrawStructure = (creep, origin) => {
 	if (creep.store.getFreeCapacity() == 0) return false
 	let targets = creep.room.find(FIND_STRUCTURES, {
 		filter: (structure) => {
-			return (origin.indexOf(structure.structureType) != -1) && (structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0);
+			return (origin.indexOf(structure.structureType) != -1) && (structure.store.getUsedCapacity(RESOURCE_ENERGY) > 200);
 		}
 	});
 	if (targets.length) {
