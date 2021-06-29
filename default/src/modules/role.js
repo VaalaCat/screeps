@@ -14,7 +14,7 @@ let harv = new OpCode(
 )
 
 let trans = new OpCode(
-	{ func: transfer, args: [STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_EXTENSION] },
+	{ func: transfer, args: [STRUCTURE_SPAWN, STRUCTURE_EXTENSION] },
 	{ func: rangeRepair, args: '' }
 )
 
@@ -100,7 +100,7 @@ export const roleHarvester = {
 		// let stage1 = new Stage(harv)
 		let stage0p5 = new Stage(pik)
 		let stage1 = new Stage(getResource)
-		let stage2 = new Stage(transToAny)
+		let stage2 = new Stage(trans)
 		let stage3 = new Stage(bud)
 		let stage4 = new Stage(upg)
 
@@ -182,6 +182,26 @@ export const roleMiscer = {
 		let threadme = new Thread(stage0, stage0p5, stage1, stage2, stage3)
 
 		threadme.start(creep)
+	}
+}
+
+export const roleFiller = {
+	run: creep => {
+
+		let fill = new OpCode(
+			{ func: transfer, args: [STRUCTURE_TOWER] },
+			{ func: rangeRepair, args: '' }
+		)
+
+		let stage0p5 = new Stage(pik)
+		let stage1 = new Stage(getResource)
+		let stage1p5 = new Stage(overdraft)
+		let stage2 = new Stage(fill)
+
+		let threadme = new Thread(stage0p5, stage1, stage1p5, stage2)
+
+		threadme.start(creep)
+
 	}
 }
 
