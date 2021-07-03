@@ -4,13 +4,14 @@ import { nearestPoint } from "./path";
  * 让 Creep 采集最近的一个能量源
  * @param {Creep} creep 
  */
-export const harvest = creep => {
+export const harvest = (creep, move) => {
 	if (creep.store.getFreeCapacity() == 0) return false
 	let sources = creep.room.find(FIND_SOURCES_ACTIVE);
 	if (sources.length) {
 		let distnation = nearestPoint(creep, sources)
 		if (creep.harvest(sources[distnation]) == ERR_NOT_IN_RANGE) {
-			// creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } })
+			if (move === true)
+				creep.moveTo(sources[distnation], { visualizePathStyle: { stroke: '#ffaa00' } })
 			return false
 		}
 		return true
@@ -210,14 +211,15 @@ export const withdrawAll = (creep, origin) => {
 /**
  * 移动到最近的一个flag
  * @param {Creep} creep 
+ * @param {bool} remove
  */
-export const moveToFlag = (creep) => {
+export const moveToFlag = (creep, remove) => {
 	let flags = creep.room.find(FIND_FLAGS, {
 		filter: (flag) => {
 			const look = flag.pos.look()
 			let haveCreep = false
 			for (let i in look) {
-				if (look[i].type === 'creep') {
+				if (look[i].type === 'creep' && look[i].creep.name != creep.name) {
 					haveCreep = true
 					break
 				}
@@ -231,7 +233,8 @@ export const moveToFlag = (creep) => {
 		if (!creep.pos.isEqualTo(flags[distnation])) {
 			creep.moveTo(flags[distnation], { visualizePathStyle: { stroke: '#666666' } })
 		} else {
-			// flags[distnation].remove()
+			if (remove === true)
+				flags[distnation].remove()
 			return false
 		}
 		return true

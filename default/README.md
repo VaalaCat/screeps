@@ -9,7 +9,7 @@
 
 - 新建 Creep 
 ```js
-Game.spawns['Spawn1'].spawnCreep( [WORK, CARRY, MOVE], 'Harvester1',{ memory: { role: 'harvester' } } );
+Game.spawns['Spawn1'].spawnCreep( [WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE], 'Miscer1',{ memory: { role: 'miscer' ,microop: 0, stage: 0, failed: 0 } } );
 ```
 
 - 启动安全模式

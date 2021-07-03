@@ -1,5 +1,5 @@
 import { errorMapper } from './modules/errorMapper'
-import { aKindCreepToDo, everyCreepToDo, renewCreep, generateCreep, clearMemory } from './modules/utils'
+import { aKindCreepToDo, everyCreepToDo, renewCreep, generateCreep, clearMemory, initObj } from './modules/utils'
 import { roleHarvester, roleUpgrader, roleBuilder, roleMiscer, roleMineer, roleFiller } from './modules/role'
 import { autoAttackCreep } from './modules/attack'
 import { repair } from './modules/operations'

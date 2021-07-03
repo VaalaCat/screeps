@@ -10,7 +10,7 @@ let bud = new OpCode(
 )
 
 let harv = new OpCode(
-	{ func: harvest, args: '' }
+	{ func: harvest, args: false }
 )
 
 let trans = new OpCode(
@@ -40,7 +40,7 @@ let cldead = new OpCode(
 )
 
 let mvtflg = new OpCode(
-	{ func: moveToFlag, args: '' }
+	{ func: moveToFlag, args: false }
 )
 
 let autoatkcrp = new OpCode(
@@ -172,14 +172,19 @@ export const roleMiscer = {
 	run: creep => {
 		//可打断型线程
 		// if (creep.memory.stage == 3) creep.memory.stage = 0
+		let mvtflgc = new OpCode(
+			{ func: moveToFlag, args: true }
+		)
+		let harvto = new OpCode(
+			{ func: harvest, args: true }
+		)
+		let stage0 = new Stage(mvtflgc)
+		let stage0p1 = new Stage(harvto)
+		let stage0p5 = new Stage(transToAny)
+		let stage1 = new Stage(bud)
+		let stage2 = new Stage(upg)
 
-		let stage0 = new Stage(mvtflg)
-		let stage0p5 = new Stage(wthdwall)
-		let stage1 = new Stage(pik)
-		let stage2 = new Stage(cldead)
-		let stage3 = new Stage(transToAny)
-
-		let threadme = new Thread(stage0, stage0p5, stage1, stage2, stage3)
+		let threadme = new Thread(stage0, stage0p1, stage0p5, stage1, stage2)
 
 		threadme.start(creep)
 	}
