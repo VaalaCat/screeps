@@ -1,0 +1,13 @@
+{
+    "main": {
+        "token": "你的 screeps token 填在这里",
+        "protocol": "https",
+        "hostname": "screeps.com",
+        "port": 443,
+        "path": "/",
+        "branch": "default"
+    },
+    "local": {
+        "copyPath": "你要上传到的游戏路径，例如 C:\\Users\\DELL\\AppData\\Local\\Screeps\\scripts\\screeps.com\\default"
+    }
+}
