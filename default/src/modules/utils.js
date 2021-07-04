@@ -64,8 +64,8 @@ export const clearMemory = () => {
  * @param {array} body Creep 的组成
  */
 export const generateCreep = (spawn, num, role, body) => {
-	let creeps = _.filter(Game.creeps, (creep) => creep.memory.role == role);
-	if (num > creeps.length) { newCreep(spawn, `${role.replace(/^\S/, s => s.toUpperCase())}${Game.time}`, role, body) }
+	let creeps = _.filter(Game.creeps, (creep) => { return (creep.memory.role == role) && (creep.room.name == Game.spawns[spawn].room.name) });
+	if (num > creeps.length) { newCreep(spawn, `${role.replace(/^\S/, s => s.toUpperCase())}${Game.time}${Game.spawns[spawn].room.name}`, role, body) }
 }
 
 

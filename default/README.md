@@ -9,7 +9,7 @@
 
 - 新建 Creep 
 ```js
-Game.spawns['Spawn1'].spawnCreep( [WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE, MOVE], 'Miscer1',{ memory: { role: 'miscer' ,microop: 0, stage: 0, failed: 0 } } );
+Game.spawns['Spawn1'].spawnCreep( [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, CLAIM], 'Miscer1',{ memory: { role: 'miscer' ,microop: 0, stage: 0, failed: 0 } } );
 ```
 
 - 启动安全模式
@@ -20,6 +20,11 @@ Game.spawns['Spawn1'].room.controller.activateSafeMode();
 - 放置地基
 ```js
 Game.spawns['Spawn1'].room.createConstructionSite( 23, 22, STRUCTURE_TOWER );
+```
+
+- 占领房间
+```js
+Game.creeps['Miscer1'].claimController(Game.creeps['Miscer1'].room.controller)
 ```
 
 ## 对象行为架构:

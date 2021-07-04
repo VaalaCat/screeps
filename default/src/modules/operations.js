@@ -102,8 +102,10 @@ export const upgrade = creep => {
 	if (creep.store.getUsedCapacity() == 0) {
 		return false
 	}
-	if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+	if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE || creep.upgradeController(creep.room.controller) == OK) {
 		creep.moveTo(creep.room.controller, { visualizePathStyle: { stroke: '#ffffff' } });
+	} else {
+		return false
 	}
 	return true
 }
@@ -214,6 +216,18 @@ export const withdrawAll = (creep, origin) => {
  * @param {bool} remove
  */
 export const moveToFlag = (creep, remove) => {
+	let globalFlags = Object.values(Game.flags).filter(flag => {
+		return (flag.color === COLOR_RED && creep.name.indexOf(flag.name.replace('Global_', '')) != -1)
+	})
+	if (globalFlags.length) {
+		if (creep.room.name != globalFlags[0].room.name) {
+			creep.moveTo(globalFlags[0], { visualizePathStyle: { stroke: '#666666' } })
+		} else {
+			return false
+		}
+		creep.moveTo(globalFlags[0], { visualizePathStyle: { stroke: '#666666' } })
+		return true
+	}
 	let flags = creep.room.find(FIND_FLAGS, {
 		filter: (flag) => {
 			const look = flag.pos.look()
