@@ -44,7 +44,21 @@ const harvest = (creep: Creep) => {
 	}
 }
 
+/**
+ * 用于生成一个指定的 Creep
+ * @param spawn Spawn 的名字
+ * @param body 一个身体组件数组
+ * @param name Creep 的名字前缀，后面会接上时间
+ * @param role Creep 的身份
+ */
+
+const spawnCreep = (spawn: string, body: any[], name: string, role: string) => {
+	Game.spawns[spawn].spawnCreep(body, name + Game.time, { memory: { role: role } });
+}
+
+
 export const funcMap = {
 	fill: fill,
-	harvest: harvest
+	harvest: harvest,
+	spawnCreep: spawnCreep
 }

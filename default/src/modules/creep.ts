@@ -18,7 +18,28 @@ export const roleTransporter = {
 		}
 
 		if (doing) {
-			funcMap['transfer'](creep);
+			funcMap[doing.todo](creep);
+		}
+	}
+}
+
+/**
+ * 主要部件为 MOVE 和 WORK 的打工人
+ */
+export const roleWorker = {
+	/**
+	 * 让工人开始打工
+	 * @param creep Creep 对象
+	 */
+	run: (creep: Creep) => {
+		let doing = creep.memory.doing;
+		if (!doing) {
+			if (creep.room.memory.workQueue) {
+				doing = creep.room.memory.workQueue.shift();
+			}
+		}
+		if (doing) {
+			funcMap[doing.todo](creep);
 		}
 	}
 }
